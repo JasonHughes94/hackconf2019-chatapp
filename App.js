@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from './Components/Header';
+import Welcome from './Components/Welcome';
 import {
   StyleSheet,
   Text,
@@ -11,12 +12,10 @@ import {
   TouchableOpacity,
   Image
 } from 'react-native';
-import { send, subscribe } from './chatServer';
-
-const NAME = 'Jason';
-const CHANNEL = 'hackconf';
-const AVATAR =
-  'https://media.licdn.com/dms/image/C5603AQEkF_gKVCL4LA/profile-displayphoto-shrink_800_800/0?e=1576108800&v=beta&t=NNeEbKGTR5BoembdD0b9U7gl70ssnbkorpklj7ZWhME';
+import { send, subscribe } from './Services/chatServer';
+import { NAME, CHANNEL, AVATAR } from './constants';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
 const renderItem = ({ item }) => {
   return (
@@ -30,7 +29,7 @@ const renderItem = ({ item }) => {
   );
 };
 
-export default function App() {
+function ChatApp() {
   const [messages, setMessages] = React.useState([]);
   const [text, setText] = React.useState('');
 
@@ -72,6 +71,18 @@ export default function App() {
     </SafeAreaView>
   );
 }
+
+const AppNavigator = createStackNavigator(
+  {
+    ChatApp: ChatApp,
+    Home: Welcome
+  },
+  {
+    initialRouteName: 'Home'
+  }
+);
+
+export default createAppContainer(AppNavigator);
 
 const styles = StyleSheet.create({
   container: {
